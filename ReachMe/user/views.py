@@ -93,6 +93,7 @@ def settingsPage(request):
     if request.method == 'POST':
         form = CreateUserInfoForm(request.POST, request.FILES)
         if form.is_valid():
+            form.cleaned_data['user'] = request.user
             form.save()
             return redirect('/')
 

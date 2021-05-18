@@ -29,6 +29,10 @@
         {% csrf_token %}
         {{ form.non_field_errors }}
         <div class="fieldWrapper">
+          {{ form.user.errors }}
+          {{ form.user }}
+        </div>
+        <div class="fieldWrapper">
           {{ form.name.errors }}
           {{ form.name }}
         </div>

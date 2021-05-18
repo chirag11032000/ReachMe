@@ -36,12 +36,13 @@ class CreateUserForm(UserCreationForm):
         super(CreateUserForm, self).__init__(*args, **kwargs)
         self.fields['password1'].widget = forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'})
         self.fields['password2'].widget = forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm password'})
-
+    
 
 class CreateUserInfoForm(ModelForm):
     class Meta:
         model = UserInfo
         fields = (
+            'user',
             'name',
             'phone',
             'profile_pic',
@@ -52,6 +53,7 @@ class CreateUserInfoForm(ModelForm):
             'bio'
         )
         widgets = {
+            'user': forms.HiddenInput(),
             'name': forms.TextInput(
                 attrs = {
                     'placeholder': 'Name'
