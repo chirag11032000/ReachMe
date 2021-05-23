@@ -5,3 +5,4 @@ from .models import *
 
 admin.site.register(UserInfo)
 admin.site.register(Interest)
+admin.site.register(FriendShipStatus)

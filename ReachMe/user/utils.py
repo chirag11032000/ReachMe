@@ -3,7 +3,7 @@ import math
 from geopy import distance
 from geopy.geocoders import Nominatim
 from datetime import date
-from .models import UserInfo
+from .models import UserInfo, FriendShipStatus
 
 
 geolocator = Nominatim(user_agent='user')
@@ -97,3 +97,19 @@ def get_recommendations(user):
                 break
 
     return recommendations
+
+
+def get_user_info(username):
+    """Returns detailed information of a user given the username"""
+    return UserInfo.objects.filter(user=username).first()
+
+
+def get_friends(user):
+    friend_is_b = FriendShipStatus.objects.filter(status='axb').filter(user_a=user)
+    friend_is_a = FriendShipStatus.objects.filter(status='axb').filter(user_b=user)
+    friends = []
+    for x in friend_is_b:
+        friends.append(get_user_info(x.user_b))
+    for x in friend_is_a:
+        friends.append(get_user_info(x.user_a))
+    return friends
