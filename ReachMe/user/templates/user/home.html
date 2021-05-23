@@ -43,7 +43,7 @@
                 {% for interest in user.interests.all %}{% if forloop.counter != 1 %}, {% endif %}{{ interest }}{% endfor %}
               </li>
             </ul><br><br>
-            <center><a href="/dashboard/{{ user.id }}" class="waves-effect waves-light btn-small">Open profile</a></center>
+            <center><a href="/dashboard/{{ user.user }}" class="waves-effect waves-light btn-small">Open profile</a></center>
           </div>
         </div>
       </div>

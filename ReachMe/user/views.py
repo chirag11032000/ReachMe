@@ -1,22 +1,14 @@
+from django.db.models.deletion import SET_DEFAULT
+import user
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
-from .models import UserInfo
-from .utils import get_recommendations
+from .models import FriendShipStatus, UserInfo
+from .utils import get_friends, get_recommendations
 from .forms import CreateUserForm, CreateUserInfoForm
-
-import numpy as np
-import pickle, os
-
-
-f = open(os.path.join(settings.BASE_DIR, 'static/knn.pkl'), 'rb')
-unpickler = pickle.Unpickler(f)
-model = unpickler.load()
 
 
 @login_required(login_url='login')
@@ -25,7 +17,7 @@ def homePage(request):
     recommendations = get_recommendations(request.user)
     context = {
         "recommendations": recommendations,
-        "user_id": UserInfo.objects.filter(user=request.user).first().id
+        "user_id": request.user
     }
     return render(request, 'user/home.html', context)
 
@@ -81,8 +73,7 @@ def logoutUser(request):
 @login_required(login_url='login')
 def dashboardPage(request, user_id):
     return render(request, 'user/dashboard.html', context={
-        'user': UserInfo.objects.filter(id=user_id).first(),
-        "user_id": UserInfo.objects.filter(user=request.user).first().id
+        'user': UserInfo.objects.filter(user=user_id).first()
     })
 
 
@@ -99,3 +90,12 @@ def settingsPage(request):
 
     context = {'form': form}
     return render(request, 'user/settings.html', context)
+
+def friendsPage(request):
+    context = {
+        'friends': get_friends(request.user)
+    }
+    return render(request, 'user/friends.html', context)
+
+def incomingRequestsPage(request):
+    return redirect('/')
