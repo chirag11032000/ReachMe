@@ -1,0 +1,47 @@
+{% extends 'user/main.html' %}
+{% load static %}
+
+
+{% block css %}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="{% static '/css/user/home.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="container" id="recommendations-container">
+    <table class="highlight">
+        <thead>
+            <tr>
+                <th>S. No.</th>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for user in friends %}
+                <tr>
+                    <td> {{ forloop.counter }} </td>
+                    <td> 
+                        <a href="/dashboard/{{ user.user }}">{{ user.name }}</a>
+                    </td>
+                    <td>
+                        <form action="#" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="requested_user" value="{{ user.user }}">
+                            <input type="submit" value="Remove friend">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
+{% block js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+{% endblock %}

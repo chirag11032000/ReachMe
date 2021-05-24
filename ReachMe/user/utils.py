@@ -1,4 +1,5 @@
 import math
+from django.contrib.auth import get_user
 
 from geopy import distance
 from geopy.geocoders import Nominatim
@@ -113,3 +114,14 @@ def get_friends(user):
     for x in friend_is_a:
         friends.append(get_user_info(x.user_a))
     return friends
+
+
+def get_incoming_requests(user):
+    other_is_a = FriendShipStatus.objects.filter(status='ab').filter(user_b=user)
+    other_is_b = FriendShipStatus.objects.filter(status='ba').filter(user_a=user)
+    incoming_requests = []
+    for x in other_is_a:
+        incoming_requests.append(get_user_info(x.user_a))
+    for x in other_is_b:
+        incoming_requests.append(get_user_info(x.user_b))
+    return incoming_requests
