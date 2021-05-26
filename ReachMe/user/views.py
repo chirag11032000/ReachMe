@@ -108,6 +108,7 @@ def settingsPage(request):
     context = {'form': form}
     return render(request, 'user/settings.html', context)
 
+@login_required(login_url='login')
 def friendsPage(request):
     if request.method == 'POST':
         requested_user = str(request.POST.get('requested_user'))
@@ -121,10 +122,12 @@ def friendsPage(request):
                 FriendShipStatus.objects.filter(status='axb').filter(user_a=user_b).filter(user_b=user_a).delete()
 
     context = {
-        'friends': get_friends(request.user)
+        'friends': get_friends(request.user),
+        'user_id': request.user
     }
     return render(request, 'user/friends.html', context)
 
+@login_required(login_url='login')
 def incomingRequestsPage(request):
     if request.method == 'POST':
         requested_user = str(request.POST.get('requested_user'))
@@ -143,6 +146,7 @@ def incomingRequestsPage(request):
                     req = FriendShipStatus(user_a=user_b, user_b=user_a, status='axb')
                     req.save()
     context = {
-        'incoming_requests': get_incoming_requests(request.user)
+        'incoming_requests': get_incoming_requests(request.user),
+        'user_id': request.user
     }
     return render(request, 'user/incoming_requests.html', context)
